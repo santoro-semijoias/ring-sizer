@@ -81,11 +81,11 @@ main {
 
 .circle {
   position:relative;
-  border: 6px solid gold;
+  border: 8px solid gold;
   border-radius: 50%;
 
   box-shadow:
-    0 0 0 6px black, /* espaço entre a borda e a sombra */
+    0 0 0 8px black, /* espaço entre a borda e a sombra */
     0 0 0 14px gold;    /* borda externa cinza clara */
 }
 
@@ -102,12 +102,12 @@ main {
 
 /* ponto mais alto */
 .circle::before {
-  top: -14px;
+  top:0;
 }
 
 /* ponto mais baixo */
 .circle::after {
-  bottom: -14px;
+  bottom:0;
 }
 
 /* INPUT */
