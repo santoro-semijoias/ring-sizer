@@ -69,6 +69,7 @@ main {
   margin: 30px auto;
   border: 2px dashed gold;
   max-height: 80vh; /* usa altura do celular */
+  margin-bottom:100px;
 }
 
 
@@ -163,7 +164,7 @@ td {
   padding: 10px;
 }
 
-#cardRange, #ringRange {
+#cardRange, #ringRange, .btn-range {
 position:fixed;
 z-index:100;
 bottom:15%;
@@ -171,6 +172,21 @@ width: 90%;
 left: 0;
 margin:0 20px;
 
+}
+
+.btn-range {
+ bottom:20%;
+ display:flex;
+ justify-content:space-between;
+ 
+}
+
+.btn-range button {
+padding: 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color:white;  
 }
 
 
@@ -210,6 +226,7 @@ margin:0 20px;
     <div id="ringCircle" class="circle"></div>
   </div>
 
+  <div class="btn-range"> <button>-</button>  <button>+</button></div>
   <input type="range" min="12" max="32" step="1" id="ringRange">
   <p>Aro selecionado: <strong id="ringSize"></strong></p>
 </section>
