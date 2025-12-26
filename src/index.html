@@ -90,6 +90,13 @@ main {
     0 0 0 16px gold;    /* borda externa cinza clara */
 }
 
+.signal-circle {
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+}
+
 /* linha superior */
 .circle::before,
 .circle::after {
@@ -223,7 +230,9 @@ padding: 14px;
   <p>Ajuste o círculo ao seu dedo ou anel.</p>
 
   <div class="circle-container">
-    <div id="ringCircle" class="circle"></div>
+    <div id="ringCircle" class="circle">
+	<p class="signal-circle">+</p>
+	</div>
   </div>
 
   <div class="btn-range"> <button id="minus">-</button>  <button id="more">+</button></div>
