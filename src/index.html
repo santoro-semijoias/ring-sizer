@@ -281,6 +281,8 @@ function updateRing() {
   ringSizeText.innerText = resultado.aro;
 }
 
+ringRange.addEventListener('input', updateRing)
+
 /* NAVEGAÇÃO */
 function next() {
   if (currentStep === 1) {
