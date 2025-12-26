@@ -65,9 +65,9 @@ main {
 .card-box {
   margin: 30px auto;
   border: 2px dashed gold;
-  max-width: 90vw;
-  height: auto;
+  max-height: 70vh; /* usa altura do celular */
 }
+
 
 /* CÍRCULO */
 .circle-container {
@@ -199,15 +199,22 @@ td {
 let currentStep = 1;
 let pxPerMm = 0;
 
-/* CARTÃO – PAISAGEM */
+/* CARTÃO – ROTACIONADO 90° (USA ALTURA) */
 const card = document.getElementById("card");
 const cardRange = document.getElementById("cardRange");
 
 function updateCard() {
-  const width = cardRange.value;
-  card.style.width = width + "px";
-  card.style.height = (width * 53.98 / 85.6) + "px";
+  const heightPx = cardRange.value;
+
+  // cartão de crédito REAL:
+  // lado maior = 85.6 mm (AGORA NA VERTICAL)
+  // lado menor = 53.98 mm (AGORA NA HORIZONTAL)
+  const widthPx = heightPx * (53.98 / 85.6);
+
+  card.style.height = heightPx + "px";
+  card.style.width = widthPx + "px";
 }
+
 updateCard();
 cardRange.oninput = updateCard;
 
