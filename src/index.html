@@ -16,6 +16,7 @@ body {
   font-family: Arial, sans-serif;
   background: #111;
   color: #fff;
+  overflow-x:hidden;
 }
 
 header {
@@ -164,7 +165,7 @@ left: 0;
 
   <div id="card" class="card-box"></div>
 
-  <input type="range" min="220" max="700" value="280" id="cardRange">
+  <input type="range" min="220" max="600" value="280" id="cardRange">
 </section>
 
 <!-- STEP 2 -->
@@ -208,16 +209,36 @@ left: 0;
 let currentStep = 1;
 let pxPerMm = 0;
 
-/* CARTÃO – ROTACIONADO 90° (USA ALTURA) */
+/* CARTÃO – ROTACIONADO 90° */
 const card = document.getElementById("card");
 const cardRange = document.getElementById("cardRange");
 
+const tabelaAros = [
+  { aro: 12, circ: 5.2 },
+  { aro: 13, circ: 5.3 },
+  { aro: 14, circ: 5.4 },
+  { aro: 15, circ: 5.5 },
+  { aro: 16, circ: 5.6 },
+  { aro: 17, circ: 5.7 },
+  { aro: 18, circ: 5.8 },
+  { aro: 19, circ: 5.9 },
+  { aro: 20, circ: 6.0 },
+  { aro: 21, circ: 6.1 },
+  { aro: 22, circ: 6.2 },
+  { aro: 23, circ: 6.3 },
+  { aro: 24, circ: 6.4 },
+  { aro: 25, circ: 6.5 },
+  { aro: 26, circ: 6.6 },
+  { aro: 27, circ: 6.7 },
+  { aro: 28, circ: 6.8 },
+  { aro: 29, circ: 6.9 },
+  { aro: 30, circ: 7.0 },
+  { aro: 31, circ: 7.1 },
+  { aro: 32, circ: 7.2 }
+];
+
 function updateCard() {
   const heightPx = cardRange.value;
-
-  // cartão de crédito REAL:
-  // lado maior = 85.6 mm (AGORA NA VERTICAL)
-  // lado menor = 53.98 mm (AGORA NA HORIZONTAL)
   const widthPx = heightPx * (53.98 / 85.6);
 
   card.style.height = heightPx + "px";
@@ -227,33 +248,51 @@ function updateCard() {
 updateCard();
 cardRange.oninput = updateCard;
 
+function calcularAroPorDiametro(diametroMm) {
+  const circCm = (Math.PI * diametroMm) / 10;
+
+  let aroMaisProximo = tabelaAros[0];
+
+  tabelaAros.forEach(item => {
+    if (Math.abs(item.circ - circCm) < Math.abs(aroMaisProximo.circ - circCm)) {
+      aroMaisProximo = item;
+    }
+  });
+
+  return {
+    aro: aroMaisProximo.aro,
+    circ: circCm.toFixed(2)
+  };
+}
+
 /* ANEL */
 const ringRange = document.getElementById("ringRange");
 const ringCircle = document.getElementById("ringCircle");
 const ringSizeText = document.getElementById("ringSize");
 
 function updateRing() {
-  const aro = ringRange.value;
-  ringSizeText.innerText = aro;
-
-  const diameterMm = 0.6366 * aro + 11.6;
+  const diameterMm = ringRange.value;
   const diameterPx = diameterMm * pxPerMm;
 
   ringCircle.style.width = diameterPx + "px";
   ringCircle.style.height = diameterPx + "px";
+
+  const resultado = calcularAroPorDiametro(diameterMm);
+  ringSizeText.innerText = resultado.aro;
 }
-ringRange.oninput = updateRing;
 
 /* NAVEGAÇÃO */
 function next() {
   if (currentStep === 1) {
-    pxPerMm = card.offsetWidth / 85.6;
+    pxPerMm = card.offsetHeight / 85.6;
   }
 
   if (currentStep === 2) {
-    document.getElementById("finalAro").innerText = ringRange.value;
-    document.getElementById("finalMm").innerText =
-      (0.6366 * ringRange.value + 11.6).toFixed(1) + " mm";
+    const diameterMm = ringRange.value;
+    const resultado = calcularAroPorDiametro(diameterMm);
+
+    document.getElementById("finalAro").innerText = resultado.aro;
+    document.getElementById("finalMm").innerText = resultado.circ + " cm";
   }
 
   if (currentStep < 3) currentStep++;
@@ -282,6 +321,7 @@ function updateStep() {
 }
 
 updateStep();
+
 </script>
 
 </body>
