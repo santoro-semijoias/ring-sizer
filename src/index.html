@@ -1,17 +1,55 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Medidor de Aliança</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
   background: #111;
   color: #fff;
-  margin: 0;
+}
+
+header {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.step-indicator {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.step-indicator.active {
+  background: gold;
+  color: #000;
+}
+
+main {
   padding: 20px;
+  padding-bottom: 90px; /* espaço para botões fixos */
   text-align: center;
 }
 
@@ -23,34 +61,15 @@ body {
   display: block;
 }
 
-button {
-  margin-top: 20px;
-  padding: 12px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  background: gold;
-  color: #000;
-  cursor: pointer;
-}
-
-button.secondary {
-  background: #333;
-  color: #fff;
-}
-
+/* CARTÃO */
 .card-box {
   margin: 30px auto;
   border: 2px dashed gold;
-  width: 300px;
-  height: calc(300px * 53.98 / 85.6);
+  max-width: 90vw;
+  height: auto;
 }
 
-input[type="range"] {
-  width: 100%;
-  margin-top: 20px;
-}
-
+/* CÍRCULO */
 .circle-container {
   display: flex;
   justify-content: center;
@@ -62,38 +81,87 @@ input[type="range"] {
   border-radius: 50%;
 }
 
-.table {
-  max-width: 300px;
+/* INPUT */
+input[type="range"] {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* BOTÕES FIXOS */
+.footer-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #000;
+  border-top: 1px solid #333;
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+}
+
+.footer-buttons button {
+  flex: 1;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.primary {
+  background: gold;
+  color: #000;
+}
+
+.secondary {
+  background: #333;
+  color: #fff;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  max-width: 320px;
   margin: 20px auto;
   border-collapse: collapse;
 }
 
-.table td {
+td {
   border: 1px solid #555;
-  padding: 8px;
+  padding: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- FASE 1 – CALIBRAÇÃO -->
-<div class="step active" id="step1">
-  <h2>1️⃣ Calibração da Tela</h2>
+<header>
+  <h2>Medidor de Aliança</h2>
+  <div class="steps">
+    <div class="step-indicator active" id="s1">1</div>
+    <div class="step-indicator" id="s2">2</div>
+    <div class="step-indicator" id="s3">3</div>
+  </div>
+</header>
+
+<main>
+
+<!-- STEP 1 -->
+<section class="step active" id="step1">
+  <h3>Calibração da Tela</h3>
   <p>Ajuste o retângulo para ficar exatamente do tamanho de um cartão de crédito.</p>
-  <p><small>Padrão: 85,60 mm × 53,98 mm</small></p>
+  <small>85,60 mm × 53,98 mm</small>
 
   <div id="card" class="card-box"></div>
 
-  <input type="range" min="200" max="400" value="300" id="cardRange">
+  <input type="range" min="220" max="360" value="280" id="cardRange">
+</section>
 
-  <button onclick="confirmCalibration()">Confirmar calibração</button>
-</div>
-
-<!-- FASE 2 – MEDIÇÃO -->
-<div class="step" id="step2">
-  <h2>2️⃣ Medição da Aliança</h2>
-  <p>Ajuste o círculo até encaixar no seu dedo ou em um anel existente.</p>
+<!-- STEP 2 -->
+<section class="step" id="step2">
+  <h3>Medição da Aliança</h3>
+  <p>Ajuste o círculo ao seu dedo ou anel.</p>
 
   <div class="circle-container">
     <div id="ringCircle" class="circle"></div>
@@ -101,16 +169,13 @@ input[type="range"] {
 
   <input type="range" min="14" max="32" value="20" id="ringRange">
   <p>Aro selecionado: <strong id="ringSize">20</strong></p>
+</section>
 
-  <button class="secondary" onclick="goBack(1)">Voltar</button>
-  <button onclick="goToTable()">Prosseguir</button>
-</div>
+<!-- STEP 3 -->
+<section class="step" id="step3">
+  <h3>Conferência Final</h3>
 
-<!-- FASE 3 – CONFERÊNCIA -->
-<div class="step" id="step3">
-  <h2>3️⃣ Conferência Final</h2>
-
-  <table class="table">
+  <table>
     <tr>
       <td>Aro Brasileiro</td>
       <td id="finalAro"></td>
@@ -120,69 +185,87 @@ input[type="range"] {
       <td id="finalMm"></td>
     </tr>
   </table>
+</section>
 
-  <button class="secondary" onclick="goBack(2)">Voltar</button>
+</main>
+
+<!-- BOTÕES -->
+<div class="footer-buttons">
+  <button class="secondary" id="backBtn" onclick="back()">Voltar</button>
+  <button class="primary" id="nextBtn" onclick="next()">Prosseguir</button>
 </div>
 
 <script>
+let currentStep = 1;
 let pxPerMm = 0;
 
-// CARTÃO
+/* CARTÃO – PAISAGEM */
 const card = document.getElementById("card");
 const cardRange = document.getElementById("cardRange");
 
-cardRange.oninput = () => {
-  card.style.width = cardRange.value + "px";
-  card.style.height = (cardRange.value * 53.98 / 85.6) + "px";
-};
-
-// CONFIRMAR CALIBRAÇÃO
-function confirmCalibration() {
-  const cardWidthPx = card.offsetWidth;
-  pxPerMm = cardWidthPx / 85.6;
-  showStep(2);
-  updateCircle();
+function updateCard() {
+  const width = cardRange.value;
+  card.style.width = width + "px";
+  card.style.height = (width * 53.98 / 85.6) + "px";
 }
+updateCard();
+cardRange.oninput = updateCard;
 
-// ANEL
+/* ANEL */
 const ringRange = document.getElementById("ringRange");
 const ringCircle = document.getElementById("ringCircle");
 const ringSizeText = document.getElementById("ringSize");
 
-ringRange.oninput = updateCircle;
-
-function updateCircle() {
+function updateRing() {
   const aro = ringRange.value;
   ringSizeText.innerText = aro;
 
-  // fórmula aproximada aro BR → diâmetro
   const diameterMm = 0.6366 * aro + 11.6;
   const diameterPx = diameterMm * pxPerMm;
 
   ringCircle.style.width = diameterPx + "px";
   ringCircle.style.height = diameterPx + "px";
 }
+ringRange.oninput = updateRing;
 
-// TABELA
-function goToTable() {
-  const aro = ringRange.value;
-  const diameterMm = (0.6366 * aro + 11.6).toFixed(1);
+/* NAVEGAÇÃO */
+function next() {
+  if (currentStep === 1) {
+    pxPerMm = card.offsetWidth / 85.6;
+  }
 
-  document.getElementById("finalAro").innerText = aro;
-  document.getElementById("finalMm").innerText = diameterMm + " mm";
+  if (currentStep === 2) {
+    document.getElementById("finalAro").innerText = ringRange.value;
+    document.getElementById("finalMm").innerText =
+      (0.6366 * ringRange.value + 11.6).toFixed(1) + " mm";
+  }
 
-  showStep(3);
+  if (currentStep < 3) currentStep++;
+  updateStep();
 }
 
-// NAVEGAÇÃO
-function showStep(step) {
+function back() {
+  if (currentStep > 1) currentStep--;
+  updateStep();
+}
+
+function updateStep() {
   document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
-  document.getElementById("step" + step).classList.add("active");
+  document.querySelectorAll(".step-indicator").forEach(s => s.classList.remove("active"));
+
+  document.getElementById("step" + currentStep).classList.add("active");
+  document.getElementById("s" + currentStep).classList.add("active");
+
+  document.getElementById("backBtn").style.display =
+    currentStep === 1 ? "none" : "block";
+
+  document.getElementById("nextBtn").innerText =
+    currentStep === 3 ? "Finalizar" : "Prosseguir";
+
+  if (currentStep === 2) updateRing();
 }
 
-function goBack(step) {
-  showStep(step);
-}
+updateStep();
 </script>
 
 </body>
