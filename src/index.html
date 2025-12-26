@@ -258,7 +258,7 @@ function calcularAroPorDiametro(diametroMm) {
       aroMaisProximo = item;
     }
   });
-
+	console.log('aro mais proximo', aroMaisProximo)
   return {
     aro: aroMaisProximo.aro,
     circ: circCm.toFixed(2)
@@ -279,6 +279,7 @@ function updateRing() {
 
   const resultado = calcularAroPorDiametro(diameterMm);
   ringSizeText.innerText = resultado.aro;
+  console.log('resultado',resultado)
 }
 
 ringRange.addEventListener('input', updateRing)
