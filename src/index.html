@@ -84,8 +84,29 @@ main {
   border-radius: 50%;
 
   box-shadow:
-    0 0 0 8px black, /* espaço entre a borda e a sombra */
+    0 0 0 6px black, /* espaço entre a borda e a sombra */
     0 0 0 14px gold;    /* borda externa cinza clara */
+}
+
+/* linha superior */
+.circle::before,
+.circle::after {
+  content: "";
+  position: absolute;
+  left: -14px;                 /* acompanha a borda externa */
+  width: calc(100% + 28px);    /* diâmetro completo */
+  height: 2px;
+  background: gold;
+}
+
+/* ponto mais alto */
+.circle::before {
+  top: -14px;
+}
+
+/* ponto mais baixo */
+.circle::after {
+  bottom: -14px;
 }
 
 /* INPUT */
