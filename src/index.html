@@ -179,7 +179,7 @@ left: 0;
     <div id="ringCircle" class="circle"></div>
   </div>
 
-  <input type="range" min="12" max="32" id="ringRange">
+  <input type="range" min="12" max="32" step="1" id="ringRange">
   <p>Aro selecionado: <strong id="ringSize"></strong></p>
 </section>
 
@@ -273,16 +273,20 @@ const ringCircle = document.getElementById("ringCircle");
 const ringSizeText = document.getElementById("ringSize");
 
 function updateRing() {
-  const diameterMm = ringRange.value;
+  const aro = parseInt(ringRange.value);
+
+  const item = tabelaAros.find(i => i.aro === aro);
+
+  const circMm = item.circ * 10; // cm → mm
+  const diameterMm = circMm / Math.PI;
   const diameterPx = diameterMm * pxPerMm;
 
   ringCircle.style.width = diameterPx + "px";
   ringCircle.style.height = diameterPx + "px";
 
-  const resultado = calcularAroPorDiametro(diameterMm);
-  ringSizeText.innerText = resultado.aro;
-  console.log('resultado',resultado)
+  ringSizeText.innerText = aro;
 }
+
 
 ringRange.addEventListener('input', updateRing)
 
