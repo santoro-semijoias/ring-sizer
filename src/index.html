@@ -80,7 +80,8 @@ main {
 }
 
 .circle {
-  border: 6px solid gold;
+  border: 12px solid gold;
+  
   border-radius: 50%;
 }
 
@@ -290,6 +291,7 @@ function updateRing() {
   ringCircle.style.height = diameterPx + "px";
 
   ringSizeText.innerText = aro;
+  return aro;
 }
 
 
@@ -302,7 +304,7 @@ function next() {
   }
 
   if (currentStep === 2) {
-    const diameterMm = parseFloat(ringRange.value);
+    const diameterMm = updateRing();
     const resultado = calcularAroPorDiametro(diameterMm);
 
     document.getElementById("finalAro").innerText = resultado.aro;
