@@ -297,7 +297,7 @@ function next() {
   }
 
   if (currentStep === 2) {
-    const diameterMm = ringRange.value;
+    const diameterMm = parseFloat(ringRange.value);
     const resultado = calcularAroPorDiametro(diameterMm);
 
     document.getElementById("finalAro").innerText = resultado.aro;
