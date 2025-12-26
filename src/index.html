@@ -86,8 +86,8 @@ main {
   border-radius: 50%;
 
   box-shadow:
-    0 0 0 8px black, /* espaço entre a borda e a sombra */
-    0 0 0 14px gold;    /* borda externa cinza clara */
+    0 0 0 10px black, /* espaço entre a borda e a sombra */
+    0 0 0 16px gold;    /* borda externa cinza clara */
 }
 
 /* linha superior */
@@ -368,7 +368,8 @@ btnPlus.addEventListener("click", () => {
 });
 
 /* inicial */
-updateRing(parseInt(ringRange.value));
+updateRing();
+
 
 
 /* NAVEGAÇÃO */
@@ -378,7 +379,7 @@ function next() {
   }
 
   if (currentStep === 2) {
-	updateRing();
+	
     const diameterMm = updateRing();
     const resultado = calcularAroPorDiametro(diameterMm);
 
