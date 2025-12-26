@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medidor de Aliança</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #fff;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background: gold;
+  color: #000;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #333;
+  color: #fff;
+}
+
+.card-box {
+  margin: 30px auto;
+  border: 2px dashed gold;
+  width: 300px;
+  height: calc(300px * 53.98 / 85.6);
+}
+
+input[type="range"] {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.circle-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+.circle {
+  border: 2px solid gold;
+  border-radius: 50%;
+}
+
+.table {
+  max-width: 300px;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.table td {
+  border: 1px solid #555;
+  padding: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- FASE 1 – CALIBRAÇÃO -->
+<div class="step active" id="step1">
+  <h2>1️⃣ Calibração da Tela</h2>
+  <p>Ajuste o retângulo para ficar exatamente do tamanho de um cartão de crédito.</p>
+  <p><small>Padrão: 85,60 mm × 53,98 mm</small></p>
+
+  <div id="card" class="card-box"></div>
+
+  <input type="range" min="200" max="400" value="300" id="cardRange">
+
+  <button onclick="confirmCalibration()">Confirmar calibração</button>
+</div>
+
+<!-- FASE 2 – MEDIÇÃO -->
+<div class="step" id="step2">
+  <h2>2️⃣ Medição da Aliança</h2>
+  <p>Ajuste o círculo até encaixar no seu dedo ou em um anel existente.</p>
+
+  <div class="circle-container">
+    <div id="ringCircle" class="circle"></div>
+  </div>
+
+  <input type="range" min="14" max="32" value="20" id="ringRange">
+  <p>Aro selecionado: <strong id="ringSize">20</strong></p>
+
+  <button class="secondary" onclick="goBack(1)">Voltar</button>
+  <button onclick="goToTable()">Prosseguir</button>
+</div>
+
+<!-- FASE 3 – CONFERÊNCIA -->
+<div class="step" id="step3">
+  <h2>3️⃣ Conferência Final</h2>
+
+  <table class="table">
+    <tr>
+      <td>Aro Brasileiro</td>
+      <td id="finalAro"></td>
+    </tr>
+    <tr>
+      <td>Diâmetro Interno</td>
+      <td id="finalMm"></td>
+    </tr>
+  </table>
+
+  <button class="secondary" onclick="goBack(2)">Voltar</button>
+</div>
+
+<script>
+let pxPerMm = 0;
+
+// CARTÃO
+const card = document.getElementById("card");
+const cardRange = document.getElementById("cardRange");
+
+cardRange.oninput = () => {
+  card.style.width = cardRange.value + "px";
+  card.style.height = (cardRange.value * 53.98 / 85.6) + "px";
+};
+
+// CONFIRMAR CALIBRAÇÃO
+function confirmCalibration() {
+  const cardWidthPx = card.offsetWidth;
+  pxPerMm = cardWidthPx / 85.6;
+  showStep(2);
+  updateCircle();
+}
+
+// ANEL
+const ringRange = document.getElementById("ringRange");
+const ringCircle = document.getElementById("ringCircle");
+const ringSizeText = document.getElementById("ringSize");
+
+ringRange.oninput = updateCircle;
+
+function updateCircle() {
+  const aro = ringRange.value;
+  ringSizeText.innerText = aro;
+
+  // fórmula aproximada aro BR → diâmetro
+  const diameterMm = 0.6366 * aro + 11.6;
+  const diameterPx = diameterMm * pxPerMm;
+
+  ringCircle.style.width = diameterPx + "px";
+  ringCircle.style.height = diameterPx + "px";
+}
+
+// TABELA
+function goToTable() {
+  const aro = ringRange.value;
+  const diameterMm = (0.6366 * aro + 11.6).toFixed(1);
+
+  document.getElementById("finalAro").innerText = aro;
+  document.getElementById("finalMm").innerText = diameterMm + " mm";
+
+  showStep(3);
+}
+
+// NAVEGAÇÃO
+function showStep(step) {
+  document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+  document.getElementById("step" + step).classList.add("active");
+}
+
+function goBack(step) {
+  showStep(step);
+}
+</script>
+
+</body>
+</html>
