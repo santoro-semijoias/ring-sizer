@@ -356,6 +356,21 @@ function updateRing(aro=22) {
   ringRange.value = aro; // 🔥 mantém o range sincronizado
 }
 
+function getRingData(aro) {
+  const item = tabelaAros.find(i => i.aro === aro);
+  if (!item) return null;
+
+  const circMm = item.circ * 10; // cm → mm
+  const diameterMm = circMm / Math.PI;
+
+  return {
+    aro: aro,
+    diameterMm: diameterMm.toFixed(2),
+    circCm: item.circ.toFixed(2)
+  };
+}
+
+
 
 
 /* RANGE → atualiza círculo */
@@ -398,13 +413,14 @@ function next() {
   }
 
   if (currentStep === 2) {
-	
-    const diameterMm = updateRing();
-    const resultado = calcularAroPorDiametro(diameterMm);
+  const aroSelecionado = parseInt(ringRange.value);
+  const dados = getRingData(aroSelecionado);
 
-    document.getElementById("finalAro").innerText = resultado.aro;
-    document.getElementById("finalMm").innerText = resultado.circ + " cm";
-  }
+  document.getElementById("finalAro").innerText = dados.aro;
+  document.getElementById("finalMm").innerText =
+    dados.diameterMm + " mm";
+}
+
 
   if (currentStep < 3) currentStep++;
   updateStep();
